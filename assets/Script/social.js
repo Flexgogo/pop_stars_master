@@ -12,7 +12,9 @@ cc.Class({
     // score: 0
   },
   init(c) {
-    this._controller = c
+    this._controller = c;
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     wx.showShareMenu({
       withShareTicket: true
     })
@@ -53,15 +55,18 @@ cc.Class({
     this.getHighestLevel()
   },
   getHighestLevel() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return 0;
     let highLevel = wx.getStorageSync('highLevel')
     return highLevel
   },
   getHighestScore() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return 0;
     let score = wx.getStorageSync('highScore')
     return score
   },
   // --------------- share ----------------
   onShareButton() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
     var self = this;
     wx.shareAppMessage({
       title: "我终于当上了" + this._controller.scoreMgr.levelData[this._controller.scoreMgr.level - 1].name + ",不服来战",
@@ -70,6 +75,8 @@ cc.Class({
     })
   },
   onUsualShareButton() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     wx.shareAppMessage({
       title: "开局只是个农民，现在已经做到宰相",
       // imageUrlId: 'oxEwGvClT0uldQ470pM84w',
@@ -77,10 +84,12 @@ cc.Class({
     })
   },
   onShakePhone() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
     wx.vibrateShort()
   },
   // ---------------分数上传---------------
   onGameOver(level, score) {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
     //上传分数
     //打开开放域
     this.score = score
@@ -137,6 +146,7 @@ cc.Class({
   //   this._isShow = true
   // },
   closeRank() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
     this.display.node.active = false
     wx.postMessage({
       message: 'Hide'
@@ -144,6 +154,8 @@ cc.Class({
     this._isShow = false
   },
   showGroupRank() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     wx.postMessage({
       message: 'Show'
     })
@@ -157,6 +169,8 @@ cc.Class({
   //   this._isShow = true
   // },
   closeGroupRank() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     this.groupDisplay.node.active = false
     wx.postMessage({
       message: 'Hide'
@@ -164,6 +178,8 @@ cc.Class({
     this._isShow = false
   },
   createImage(sprite, url) {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     let image = wx.createImage();
     image.onload = function () {
       let texture = new cc.Texture2D();
@@ -174,6 +190,8 @@ cc.Class({
     image.src = url;
   },
   update() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     if (this._isShow) {
       if (this.display.node.active) {
         this.display.node.getComponent(cc.WXSubContextView).update()
@@ -185,6 +203,8 @@ cc.Class({
   },
   // 控制打开广告
   onReviveButton(type) {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     // 广告位
     let self = this
     this.adType = type //0表示加倍 1表示复活
@@ -233,6 +253,8 @@ cc.Class({
     })
   },
   fakeShare() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     let self = this
     wx.shareAppMessage({
       title: "我已经玩到" + this._controller.scoreMgr.score + "分了，邀请你来挑战",
@@ -246,6 +268,8 @@ cc.Class({
     }
   },
   openBannerAdv() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     // 创建 Banner 广告实例，提前初始化
     // let screenWidth = wx.getSystemInfoSync().screenWidth
     // let bannerHeight = screenWidth / 350 * 120
@@ -277,12 +301,16 @@ cc.Class({
     //   .then()
   },
   navToMiniprogram(event,custom) {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     console.log(custom)
     wx.navigateToMiniProgram({
       appId: custom
     })
   },
   closeBannerAdv() {
+    if (cc.sys.platform != cc.sys.WECHAT_GAME)return;
+
     if (this.bannerAd) {
       this.bannerAd.hide()
     }
